@@ -6,6 +6,9 @@ import { OpenAiModule } from './modules/open-ai/open-ai.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CacheModule } from '@nestjs/cache-manager';
+import { QueriesModule } from './modules/queries/queries.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -21,8 +24,11 @@ import { CacheModule } from '@nestjs/cache-manager';
         uri: process.env.MOGO_URI,
       }),
     }),
+    AuthModule,
+    UsersModule,
     DatabaseModule,
-    OpenAiModule
+    OpenAiModule,
+    QueriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

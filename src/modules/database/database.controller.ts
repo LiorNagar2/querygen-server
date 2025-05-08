@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import { DatabaseService } from './database.service';
 import { OpenAIService } from '../open-ai/open-ai.service';
-import { BaseController, CrudActions } from 'nest-crud-service';
+import { BaseController, CrudActions } from 'nest-mongo-crud';
 import { Database } from './database.schema';
 
 interface User {
@@ -37,6 +37,18 @@ export class DatabaseController extends BaseController<Database> {
     const sql = await this.openAIService.generateSQLQuery(question, schema);
 
     return { success: true, sql };
+  }
+
+  @Post('generate-analytics-sql/:id')
+  async generateAnalyticsSql(@Param('id') id: string){
+    const schema = await this.databaseService.getDatabaseStructure(id); // Get actual schema
+    console.log('#########Schema ', schema);
+    if (!schema) {
+      return { success: false, message: 'Could not fetch database structure' };
+    }
+    const res = await this.openAIService.generateAnalyticsQueries(schema);
+
+    return res;
   }
 
   @Post('query/:id')
