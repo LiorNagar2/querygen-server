@@ -13,8 +13,8 @@ class GraphConfig {
   @Prop()
   labelColumn?: string;
 
-  @Prop()
-  valueColumn?: string;
+  @Prop({ type: [String], default: [] }) // ✅ Array of strings for multiple value columns
+  valueColumns?: string[];
 
   @Prop({ enum: ChartType })
   chartType?: ChartType;
@@ -31,7 +31,7 @@ export class Query extends Document {
   @Prop()
   query: string;
 
-  @Prop({ type: GraphConfig, _id: false }) // 👈 Apply _id: false here
+  @Prop({ type: GraphConfig, _id: false }) // ✅ Use updated GraphConfig
   graphConfig?: GraphConfig;
 }
 

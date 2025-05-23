@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { ChartType } from '../query.schema';
 import { Type } from 'class-transformer';
 
@@ -9,10 +9,11 @@ class GraphConfigDto {
   @IsString()
   labelColumn?: string;
 
-  @ApiPropertyOptional({ description: 'Column to use as value (Y-axis)', type: String })
+  @ApiPropertyOptional({ description: 'Columns to use as values (Y-axis)', type: [String] })
   @IsOptional()
-  @IsString()
-  valueColumn?: string;
+  @IsArray()
+  @IsString({ each: true }) // ✅ Validate each item is a string
+  valueColumns?: string[];
 
   @ApiPropertyOptional({ enum: ChartType, description: 'Chart type to use' })
   @IsOptional()
@@ -23,6 +24,7 @@ class GraphConfigDto {
 export class CreateQueryDto {
   @ApiProperty()
   name: string;
+
   @ApiProperty()
   query: string;
 

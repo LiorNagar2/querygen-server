@@ -22,7 +22,7 @@ export class OpenAIService {
 
   Request: ${naturalText}`;
 
-    const responseText = await this.sendRequest(prompt, 400);
+    const responseText = await this.sendRequest(prompt, 200);
     const sql = this.extractSQL(responseText);
 
     return sql;
