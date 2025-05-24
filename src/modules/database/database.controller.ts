@@ -3,6 +3,8 @@ import { DatabaseService } from './database.service';
 import { OpenAIService } from '../open-ai/open-ai.service';
 import { BaseController, CrudActions } from 'nest-mongo-crud';
 import { Database } from './database.schema';
+import { ExecuteQueryDto } from './dto/execute-query.dto';
+import { Auth } from '../auth/decorators/auth.decorator';
 
 interface User {
   username: string;
@@ -40,7 +42,7 @@ export class DatabaseController extends BaseController<Database> {
   }
 
   @Post('generate-analytics-sql/:id')
-  async generateAnalyticsSql(@Param('id') id: string){
+  async generateAnalyticsSql(@Param('id') id: string) {
     const schema = await this.databaseService.getDatabaseStructure(id); // Get actual schema
     console.log('#########Schema ', schema);
     if (!schema) {
@@ -52,8 +54,8 @@ export class DatabaseController extends BaseController<Database> {
   }
 
   @Post('query/:id')
-  async executeQuery(@Param('id') id: string, @Body('query') query: string) {
-    return this.databaseService.executeQuery(id, query);
+  async executeQuery(@Param('id') id: string, @Body() body: ExecuteQueryDto) {
+    return this.databaseService.executeQuery(id, body.query);
   }
 
 
