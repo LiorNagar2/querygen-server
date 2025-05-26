@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Sequelize, QueryTypes } from 'sequelize';
 import { BaseService } from 'nest-mongo-crud';
 import { Database } from './database.schema';
@@ -31,7 +31,7 @@ export class DatabaseService extends BaseService<Database> {
     super(databaseModel);
   }
 
-  async connectDatabase(id: string): Promise<{ success: boolean; message: string, schema?: DatabaseStructure}> {
+  async connectDatabase(id: string): Promise<{ success: boolean; message: string, schema?: DatabaseStructure }> {
     try {
       const db = await this.findOne({ _id: id });
       const sequelize = new Sequelize({
@@ -53,10 +53,7 @@ export class DatabaseService extends BaseService<Database> {
         schema,
       };
     } catch (error: any) {
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 

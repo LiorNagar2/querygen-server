@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {ApiProperty} from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export enum DBTypes {
   MYSQL = 'mysql',
@@ -15,15 +15,18 @@ export class Database extends Document {
   name: string;
 
   @Prop({ required: true })
+  connectionName: string;
+
+  @Prop({ required: true })
   type: DBTypes;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   host: string;
 
-  @Prop({required: false})
+  @Prop({ required: false })
   user: string;
 
-  @Prop({required: false})
+  @Prop({ required: false })
   password: string;
 }
 
